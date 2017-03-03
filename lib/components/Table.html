@@ -1,0 +1,83 @@
+<div>
+
+  <!-- {{#if data && data.header}}
+    <thead>
+      <tr>
+        {{#each data.header as item}}
+          <th>{{item}}</th>
+        {{/each}}
+      </tr>
+    </thead>
+  {{/if}}
+
+  {{#if data && data.rows}}
+    <tbody>
+      {{#each data.rows as item}}
+        <td>item</td>
+      {{/each}}
+    </tbody>
+  {{/if}}
+
+  {{#if data && data.footer }}
+    <tfoot>
+      {{#each data.footer as item}}
+        <td>{{item}}</td>
+      {{/each}}
+    </tfoot>
+  {{/if}} -->
+</div>
+
+<script>
+  import getRange from 'get-range';
+
+  export default {
+    data() {
+      return {
+        data: null,
+        formatData: []
+      }
+    },
+    oncreate() {
+      this.observe('data', data => {
+        console.log(getRange)
+        if (data === null) {
+          return;
+        }
+        console.log(getRange)
+        console.log(data.rows)
+        console.log(data.rows.length)
+        console.log(getRange(data.rows.length))
+
+        console.log(getRange(data.rows.length))
+
+        if (!('rows' in data)) {
+          return;
+        }
+
+        console.log(getRange(data.rows.length))
+
+        for (const i in getRange(data.rows.length)) {
+          const col = (() => {
+            const _col = [];
+            if ('header' in data) {
+              _col.push(data.header[idx])
+            }
+
+            data.rows.forEach(row => {
+              _col.push(row[i]);
+            });
+
+            if ('footer' in data) {
+              _col.psh(data.footer[idx])
+            }
+            return _col;
+          })();
+          console.log(col)
+          this.formatData.push(col);
+        }
+
+        console.log(this.formatData);
+      });
+    }
+  }
+</script>
