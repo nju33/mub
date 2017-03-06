@@ -1,83 +1,67 @@
-<div>
-
-  <!-- {{#if data && data.header}}
-    <thead>
-      <tr>
-        {{#each data.header as item}}
-          <th>{{item}}</th>
+<div class="table-container">
+  <div ref:table class="table">
+    {{#each data as col, y}}
+      <div class="col">
+        {{#each col as item, x}}
+          {{#if typeof item === 'object'}}
+            {{#if item.fixed}}
+              <div class="col-wrapper fixed">
+                <div style="height: {{heights[x] + 'px' || 'auto'}}">{{item.value}}</div>
+              </div>
+            {{else}}
+              <div style="height: {{heights[x] + 'px' || 'auto'}}">{{item.value}}</div>
+            {{/if}}
+          {{else}}
+            <div style="height: {{heights[x] + 'px' || 'auto'}}">{{item}}</div>
+          {{/if}}
         {{/each}}
-      </tr>
-    </thead>
-  {{/if}}
-
-  {{#if data && data.rows}}
-    <tbody>
-      {{#each data.rows as item}}
-        <td>item</td>
-      {{/each}}
-    </tbody>
-  {{/if}}
-
-  {{#if data && data.footer }}
-    <tfoot>
-      {{#each data.footer as item}}
-        <td>{{item}}</td>
-      {{/each}}
-    </tfoot>
-  {{/if}} -->
+      </div>
+    {{/each}}
+  </div>
 </div>
+
+<style>
+.container {
+  padding: 0 10px 10px 0;
+  box-sizing: border-box;
+  overflow: auto;
+}
+
+.table {
+  display: flex;
+}
+
+.col {
+  flex: auto;
+  min-width: 10em;
+}
+</style>
 
 <script>
   import getRange from 'get-range';
+  import max from 'lodash.max';
 
   export default {
     data() {
       return {
-        data: null,
-        formatData: []
-      }
+        heights: []
+      };
     },
     oncreate() {
-      this.observe('data', data => {
-        console.log(getRange)
-        if (data === null) {
-          return;
-        }
-        console.log(getRange)
-        console.log(data.rows)
-        console.log(data.rows.length)
-        console.log(getRange(data.rows.length))
+      const {table} = this.refs;
+      const {data} = this.get();
+      let heights = [];
 
-        console.log(getRange(data.rows.length))
+      for (const idx of getRange(data[0].length)) {
+        const rows = Array.prototype.slice.call(table.children);
+        const maxHeight = max(rows.map(row => {
+          const height = row.children[idx].clientHeight;
+          return height;
+        }));
+        heights.push(maxHeight);
+      }
 
-        if (!('rows' in data)) {
-          return;
-        }
-
-        console.log(getRange(data.rows.length))
-
-        for (const i in getRange(data.rows.length)) {
-          const col = (() => {
-            const _col = [];
-            if ('header' in data) {
-              _col.push(data.header[idx])
-            }
-
-            data.rows.forEach(row => {
-              _col.push(row[i]);
-            });
-
-            if ('footer' in data) {
-              _col.psh(data.footer[idx])
-            }
-            return _col;
-          })();
-          console.log(col)
-          this.formatData.push(col);
-        }
-
-        console.log(this.formatData);
-      });
+      this.set({heights});
     }
   }
 </script>
