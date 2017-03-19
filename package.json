@@ -1,5 +1,5 @@
 {
-  "name": "@nju33/mub",
+  "name": "taba",
   "version": "0.0.0",
   "description": "",
   "main": "dist/mub.umd.js",
@@ -8,7 +8,7 @@
     "start": "node dev-server.js",
     "prepublish": "yarn prod",
     "preprod": "mkdir -p dist; NODE_ENV='production' node prod.js",
-    "prod": "babili dist/mub.js --no-comments --minified -o dist/mub.min.js",
+    "prod": "babili dist/taba.js --no-comments --minified -o dist/taba.min.js",
     "_test": "xo && ava",
     "test": "xo"
   },
@@ -37,9 +37,11 @@
     "babel-eslint": "6",
     "babel-plugin-external-helpers": "^6.18.0",
     "babel-plugin-transform-class-properties": "^6.19.0",
+    "babel-plugin-transform-runtime": "^6.23.0",
     "babel-preset-env": "^0.0.9",
     "babili": "^0.0.9",
     "browser-sync": "^2.18.2",
+    "casual": "^1.5.11",
     "cssnano": "^3.8.1",
     "gulp": "^3.9.1",
     "gulp-less": "^3.3.0",
@@ -67,6 +69,10 @@
       "node",
       "browser"
     ],
+    "files": [
+      "example/**/*.js",
+      "src/**/*.js"
+    ],
     "esnext": true,
     "space": 2,
     "ignores": [
@@ -87,6 +93,9 @@
     "get-range": "^1.0.0",
     "lodash.flatten": "^4.4.0",
     "lodash.max": "^4.0.1",
+    "lodash.throttle": "^4.1.1",
+    "lodash.zip": "^4.2.0",
+    "raf": "^3.3.0",
     "redux": "^3.6.0"
   }
 }

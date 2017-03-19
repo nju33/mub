@@ -64,5 +64,6 @@ Temporary Items
 .apdisk
 
 /dist/**
+!/dist/.gitkeep
 /lib/style.css*
 /lib/class-name.json

@@ -9,7 +9,7 @@ const modules = require('postcss-modules');
 const {rollup} = require('rollup');
 const rollupConfig = require('./rollup.config');
 
-const MODULE_NAME = 'Mub';
+const MODULE_NAME = 'Taba';
 const globals = {};
 
 exports.bundleAll = () => {
@@ -55,7 +55,7 @@ function bundle() {
               globals,
               format
             };
-            const destPath = './dist/mub.js';
+            const destPath = './dist/taba.js';
             try {
               fs.writeFileSync(destPath, bundle.generate(opts).code);
             } catch (err) {
@@ -65,11 +65,11 @@ function bundle() {
           }
           case 'umd': {
             const opts = {
-              moduleName: MODULE_NAME,
+              moduleName: 'default',
               globals,
               format
             };
-            const destPath = './dist/mub.umd.js';
+            const destPath = './dist/taba.umd.js';
             try {
               fs.writeFileSync(destPath, bundle.generate(opts).code);
             } catch (err) {
@@ -79,8 +79,12 @@ function bundle() {
           }
           case 'es':
           default: {
-            const opts = {globals, format};
-            const destPath = './dist/mub.es.js';
+            const opts = {
+              globals,
+              format,
+              exports: 'default'
+            };
+            const destPath = './dist/taba.es.js';
             try {
               fs.writeFileSync(destPath, bundle.generate(opts).code);
             } catch (err) {

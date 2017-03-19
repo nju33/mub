@@ -1,12 +1,12 @@
 {
   "presets": [
     ["env", {
-      "browsers": ["last 2 versions"],
+      "browsers": ["> 3%", "last 2 versions"],
       "modules": false
     }]
   ],
   "plugins": [
-    "external-helpers",
+    "transform-runtime",
     "transform-class-properties"
   ]
 }

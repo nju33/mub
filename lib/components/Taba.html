@@ -1,0 +1,137 @@
+<div class="taba container">
+  {{#if formattedData !== null}}
+    <Table style="{{style || defaultStyle}}" data="{{formattedData}}" cols="{{cols}}"/>
+  {{/if}}
+</div>
+
+<style>
+</style>
+
+<script>
+  import getRange from 'get-range';
+  import flatten from 'lodash.flatten';
+  import zip from 'lodash.zip';
+  import Table from './Table.html';
+
+  export default {
+    components: {
+      Table
+    },
+    data() {
+      return {
+        _heights: [],
+        defaultStyle: {
+          height: 'auto',
+          width: '100%',
+          cellPadding: '1em',
+          baseColor: '#f3f3f3',
+          subColor: '#ccc',
+          fixedElementColor: '#fff',
+          shadowColor: '#222'
+        },
+        data: null,
+        formattedData: null,
+        cols: []
+      }
+    },
+    methods: {
+      formatData(_data) {
+        const data = Object.assign({}, _data);
+
+        if ('header' in data) {
+          if (typeof data.header !== 'object') {
+            throw new Error('Required Array of Object');
+          }
+
+          if (Array.isArray(data.header)) {
+            data.header = {
+              data: data.header,
+              fixed: false
+            };
+          }
+        }
+
+        if (typeof data.body !== 'object') {
+          throw new Error('Required Array of Object');
+        }
+
+        if (Array.isArray(data.body)) {
+          data.body = {
+            data: data.body,
+            fixed: false,
+            zip: false
+          };
+        }
+
+        if (data.body.zip) {
+          data.body.data = zip.apply(null, data.body.data);
+        }
+
+        if ('footer' in data) {
+          if (typeof data.footer !== 'object') {
+            throw new Error('Required Array of Object');
+          }
+
+          if (Array.isArray(data.footer)) {
+            data.footer = {
+              data: data.footer,
+              fixed: false
+            };
+          }
+        }
+
+        return data;
+      }
+    },
+    oncreate() {
+      this.observe('style', style => {
+        const {defaultStyle} = this.get();
+        const newStyle = Object.assign({}, defaultStyle, style);
+        this.set({style: newStyle});
+      });
+      this.observe('data', data => {
+        if (data === null) {
+          return;
+        }
+
+        if (!('body' in data)) {
+          throw new Error('Requried body prop');
+        }
+
+        const formattedData = this.formatData(data);
+        const range = (() => {
+          if (Array.isArray(data.body)) {
+            return getRange(data.body.length);
+          } else {
+            return getRange(data.body.data.length);
+          }
+        })();
+        const cols = [];
+
+        for (const idx of range) {
+          const col = (() => {
+            const _col = [];
+            if ('header' in formattedData) {
+              _col.push(formattedData.header.data[idx]);
+            }
+
+            _col.push(formattedData.body.data[idx]);
+
+            if ('footer' in formattedData) {
+              _col.push(formattedData.footer.data[idx]);
+            }
+
+            return flatten(_col);
+          })();
+
+          cols.push(col);
+        }
+
+        this.set({
+          formattedData,
+          cols
+        });
+      });
+    }
+  }
+</script>

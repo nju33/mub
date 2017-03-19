@@ -1,62 +1,78 @@
-# Mub
+# Taba
 
-[![XO code style](https://img.shields.io/badge/code_style-XO-5ed9c7.svg)](https://github.com/sindresorhus/xo)
+<!-- [![XO code style](https://img.shields.io/badge/code_style-XO-5ed9c7.svg)](https://github.com/sindresorhus/xo)
 
-[![Build Status](https://travis-ci.org/nju33/mub.svg?branch=master)](https://travis-ci.org/nju33/mub)
+[![Build Status](https://travis-ci.org/nju33/taba.svg?branch=master)](https://travis-ci.org/nju33/taba) -->
 
-A small conversation library that happens at hand
+🔧 Fixed table that works with pure JavaScript
 
-<img src="https://github.com/nju33/mub/raw/master/screenshot.gif?raw=true" alt="mub" width="300">
+
+![screenshot](https://github.com/nju33/taba/raw/master/images/screenshot.gif?raw=true)
 
 ## Install, or Download
 
-### npm
-
 ```sh
-$ npm i -S @nju33/mub
+yarn add taba
+npm i -S taba
 ```
 
-### yarn
-
-```sh
-$ yarn add @nju33/mub
-```
-
-### bower
-
-```sh
-$ bower i -S mub
-```
-
-### Download
-
-Access to [releases page](https://github.com/nju33/mub/releases).
+Or access to [releases page](https://github.com/nju33/taba/releases).
 Then, download the latest version.
 
 ## Usage
 
-### Bandler
-
-> (e.g.) webpack, browserify, rollup...
-
 ```js
-// es
-import mub from '@nju33/mub';
-// common
-const mub = require('@nju33/mub');
+import Taba from 'taba';
+
+const data =
+
+new Taba({
+  target: getElementById('target')
+  data: {
+    style: {
+      // defaults
+      height: 'auto',
+      width: '100%',
+      cellPadding: '1em',
+      baseColor: '#f3f3f3',
+      subColor: '#ccc',
+      fixedElementColor: '#fff',
+      shadowColor: '#222'
+    }
+    data: {
+      header: {
+        data: [...],
+        fixed: true
+      },
+      body: {
+        data: [
+          [...],
+          [...],
+          [...]
+        ],
+        // Even though scrolling horizontally,
+        // the first column is displayed all the time
+        fixed: 1,
+        // Zip this.data
+        // Using lodash.zip
+        zip: false
+      },
+      footer: {
+        data: [...],
+        fixed: false
+      }
+    }
+  }
+});
 ```
 
-### Browser
+### Example
 
-```html
-<script src="/path/to/mub.js"></script>
-<script>// Your JS code.</script>
-```
-
-## API
-
-TODO...
+- `test/fixtures/index.js`
+- `example/webpack/index.js`
 
 ## LICENSE
 
-MIT
+The MIT License (MIT)
+
+Copyright (c) 2017 nju33 <nju33.ki@gmail.com>

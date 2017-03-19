@@ -1,67 +1,308 @@
-<div class="table-container">
-  <div ref:table class="table">
-    {{#each data as col, y}}
-      <div class="col">
+<div class="taba table-container">
+  <div ref:table class="taba table" on:scroll="handleScroll(event)" style="
+      width: {{style.width}};
+      height: {{style.height}};
+      background-color: {{style.baseColor}}
+    ">
+    {{#each cols as col, y}}
+      <div class="taba col">
         {{#each col as item, x}}
-          {{#if typeof item === 'object'}}
-            {{#if item.fixed}}
-              <div class="col-wrapper fixed">
-                <div style="height: {{heights[x] + 'px' || 'auto'}}">{{item.value}}</div>
-              </div>
-            {{else}}
-              <div style="height: {{heights[x] + 'px' || 'auto'}}">{{item.value}}</div>
-            {{/if}}
+          {{#if x === 0 && 'header' in data && (data.header.fixed || y < fixedValue) && heights[x]}}
+            <div class="taba cell-wrapper header fixed" style="
+              width: {{widths[y] ? widths[y] + 'px' : 'auto'}};
+              height: {{heights[x] ? heights[x] + 'px' : 'auto'}};
+            ">
+              <div class="taba cell"><div class="taba cell-inner" style="
+                 width: {{widths[y] ? widths[y] + 'px' : 'auto'}};
+                 height: {{heights[x] ? heights[x] + 'px' : 'auto'}};
+                 padding: {{style.cellPadding}};
+                 z-index: {{y < (data.body.fixed || 0) ? 9 : 8}};
+                 background-color: {{style.fixedElementColor}}
+              ">{{item}}</div></div>
+            </div>
+          {{elseif x === 0 && 'header' in data}}
+            <div class="taba cell-wrapper header" style="
+              width: {{widths[y] ? widths[y] + 'px' : 'auto'}};
+              height: {{heights[x] ? heights[x] + 'px' : 'auto'}};
+            ">
+              <div class="taba cell"><div class="taba cell-inner" style="
+                width: {{widths[y] ? widths[y] + 'px' : 'auto'}};
+                height: {{heights[x] ? heights[x] + 'px' : 'auto'}};
+                padding: {{style.cellPadding}};
+                background-color: {{x % 2 === 0 ? style.baseColor : style.subColor}}
+              ">{{item}}</div></div>
+            </div>
+          {{elseif x === col.length - 1 && 'footer' in data && (data.footer.fixed || y < fixedValue) && heights[x]}}
+            <div class="taba cell-wrapper footer fixed" style="
+              width: {{widths[y] ? widths[y] + 'px' : 'auto'}};
+              height: {{heights[x] ? heights[x] + 'px' : 'auto'}};
+            ">
+              <div class="taba cell"><div class="taba cell-inner" style="
+                width: {{widths[y] ? widths[y] + 'px' : 'auto'}};
+                height: {{heights[x] ? heights[x] + 'px' : 'auto'}};
+                padding: {{style.cellPadding}};
+                z-index: {{y < (data.body.fixed || 0) ? 9 : 8}};
+                background-color: {{style.fixedElementColor}}
+              ">{{item}}</div></div>
+            </div>
+          {{elseif x === col.length - 1 && 'footer' in data}}
+            <div class="taba cell-wrapper footer" style="
+              width: {{widths[y] ? widths[y] + 'px' : 'auto'}};
+              height: {{heights[x] ? heights[x] + 'px' : 'auto'}};
+            ">
+              <div class="taba cell"><div class="taba cell-inner" style="
+                width: {{widths[y] ? widths[y] + 'px' : 'auto'}};
+                height: {{heights[x] ? heights[x] + 'px' : 'auto'}};
+                padding: {{style.cellPadding}};
+                background-color: {{x % 2 === 0 ? style.baseColor : style.subColor}}
+              ">{{item}}</div></div>
+            </div>
+          {{elseif y < fixedValue && heights[x]}}
+            <div class="taba cell-wrapper body fixed" style="
+              width: {{widths[y] ? widths[y] + 'px' : 'auto'}};
+              height: {{heights[x] ? heights[x] + 'px' : 'auto'}};
+            ">
+              <div class="taba cell"><div class="taba cell-inner" style="
+                width: {{widths[y] ? widths[y] + 'px' : 'auto'}};
+                height: {{heights[x] ? heights[x] + 'px' : 'auto'}};
+                padding: {{style.cellPadding}};
+                z-index: 8;
+                background-color: {{style.fixedElementColor}}
+              ">{{item}}</div></div>
+            </div>
           {{else}}
-            <div style="height: {{heights[x] + 'px' || 'auto'}}">{{item}}</div>
+            <div class="taba cell-wrapper body" style="
+              width: {{widths[y] ? widths[y] + 'px' : 'auto'}};
+              height: {{heights[x] ? heights[x] + 'px' : 'auto'}};
+            ">
+              <div class="taba cell"><div class="taba cell-inner" style="
+                width: {{widths[y] ? widths[y] + 'px' : 'auto'}};
+                height: {{heights[x] ? heights[x] + 'px' : 'auto'}};
+                padding: {{style.cellPadding}};
+                background-color: {{x % 2 === 0 ? style.baseColor : style.subColor}}
+              ">{{item}}</div></div>
+            </div>
           {{/if}}
         {{/each}}
       </div>
     {{/each}}
   </div>
+
+  {{#if fixedValue}}
+    <div class="taba br y" ref:y style="
+      left: {{yPos}}px;
+      opacity: {{scrollLeft > 0 ? 1 : 0}};
+      box-shadow: 5px 0 6px -2px {{style.shadowColor}}
+    "></div>
+  {{/if}}
+
+  {{#if data.header && (data.header.fixed || fixedValue)}}
+    <div class="taba br x" ref:x1 style="
+      {{data.header.fixed ? `left: ${yPos + 5}px;` : ''}}
+      top: {{x1Pos}}px;
+      {{data.header.fixed ? '' : `width: ${yPos + 5}px;`}}
+      opacity: {{scrollTop > 0 ? 1 : 0}};
+      box-shadow: 0 5px 6px -2px {{style.shadowColor}}
+    "></div>
+  {{/if}}
+
+  {{#if data.footer && (data.footer.fixed || fixedValue)}}
+    <div class="taba br x" ref:x2 style="
+      {{data.footer.fixed ? `left: ${yPos + 5}px;` : ''}}
+      bottom: {{x2Pos}}px;
+      {{data.footer.fixed ? '' : `width: ${yPos + 5}px;`}}
+      opacity: {{scrollTop < scrollHeight - clientHeight ? 1 : 0}};
+      box-shadow: 0 -5px 6px -2px {{style.shadowColor}}
+    "></div>
+  {{/if}}
 </div>
 
-<style>
-.container {
-  padding: 0 10px 10px 0;
-  box-sizing: border-box;
-  overflow: auto;
+<style scoped>
+.taba.table-container {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
 }
 
-.table {
+.taba.table {
   display: flex;
+  overflow-y: auto;
 }
 
-.col {
+.taba.col {
   flex: auto;
-  min-width: 10em;
 }
+
+.taba.cell-wrapper.fixed .cell {
+  position: absolute;
+  width: 100%;
+}
+
+.taba.cell-wrapper.fixed.footer .cell {
+  position: absolute;
+  width: 100%;
+  bottom: 0;
+}
+
+.taba.cell-inner {
+  box-sizing: border-box;
+  position: relative;
+}
+
+.taba.br {
+  position: absolute;
+  z-index: 9;
+  transition: opacity .2s cubic-bezier(0.455, 0.03, 0.515, 0.955);
+}
+
+.taba.br.x {
+  left: 0;
+  width: 200%;
+  height: 5px;
+}
+
+.taba.br.y {
+  top: 0;
+  width: 5px;
+  height: 200%;
+  z-index: 10;
+}
+
 </style>
 
 <script>
+  import raf from 'raf';
   import getRange from 'get-range';
   import max from 'lodash.max';
+  import throttle from 'lodash.throttle';
 
   export default {
     data() {
       return {
-        heights: []
+        widths: [],
+        heights: [],
+        scrollHeight: 0,
+        scrollLeft: 0,
+        scrollTop: 0,
+        yPos: 0,
+        x1Pos: 0,
+        x2Pos: 0
       };
     },
-    oncreate() {
-      const {table} = this.refs;
-      const {data} = this.get();
-      let heights = [];
-
-      for (const idx of getRange(data[0].length)) {
-        const rows = Array.prototype.slice.call(table.children);
-        const maxHeight = max(rows.map(row => {
-          const height = row.children[idx].clientHeight;
-          return height;
-        }));
-        heights.push(maxHeight);
+    computed: {
+      fixedValue(data) {
+        return data.body.fixed || 0;
       }
+    },
+    methods: {
+      handleScroll: throttle(function () {
+        const {table} = this.refs;
+        const {data, fixedValue} = this.get();
 
-      this.set({heights});
+        this.set({
+          scrollLeft: table.scrollLeft,
+          scrollTop: table.scrollTop,
+          clientHeight: table.clientHeight,
+          scrollHeight: table.scrollHeight
+        });
+
+        (() => {
+          const headers = Array.prototype.slice.call(
+            table.querySelectorAll(`.taba.fixed.header .cell-inner`)
+          );
+          const footers = Array.prototype.slice.call(
+            table.querySelectorAll(`.taba.fixed.footer .cell-inner`)
+          );
+
+          headers.slice(fixedValue).concat(footers.slice(fixedValue))
+            .forEach(cellElem => {
+              cellElem.style.left = -table.scrollLeft + 'px';
+            });
+        })();
+
+        (() => {
+          const cells = Array.prototype.slice.call(
+            table.querySelectorAll(
+              '.taba.fixed.body .cell-inner'
+            )
+          );
+
+          cells.forEach(cellElem => {
+            cellElem.style.top = -table.scrollTop + 'px';
+          })
+        })();
+      }, 10),
+      getRects(cols, table) {
+        const widths = [];
+        const heights = [];
+
+        for (const idx of getRange(cols[0].length)) {
+          const rows = Array.prototype.slice.call(table.children);
+
+          rows.forEach(row => {
+            widths.push(row.clientWidth);
+          });
+
+          const maxHeight = max(rows.map(row => {
+            return row.children[idx].clientHeight;
+          }));
+          heights.push(maxHeight);
+        }
+
+        return {widths, heights};
+      }
+    },
+    oncreate() {
+      const proc = () => {
+        const {style, data, cols} = this.get();
+        const {table, x1, x2, y} = this.refs;
+        const rects = this.getRects(cols, table);
+        this.set(rects);
+        raf(() => {
+          const cells = table.querySelectorAll('.taba.fixed .cell');
+
+          Array.prototype.slice.call(cells).forEach(cellElem => {
+            Object.assign(cellElem.style, {
+              left: cellElem.offsetLeft + 'px',
+              top: cellElem.offsetTop + 'px'
+            });
+          });
+
+          if (data.body.fixed) {
+            const yPos = (() => {
+              return rects.widths.slice(0, data.body.fixed).reduce((result, width) => {
+                result += width;
+                return result;
+              }, 0) - 5;
+            })();
+            this.set({
+              yPos,
+              x1Pos: rects.heights[0] - 5,
+              x2Pos: rects.heights[rects.heights.length - 1] - 5
+            });
+
+            this.handleScroll();
+          }
+        });
+      };
+
+      proc();
+
+      window.addEventListener('resize', () => {
+        this.set({
+          widths: [],
+          heights: [],
+          scrollHeight: 0,
+          scrollLeft: 0,
+          scrollTop: 0,
+          yPos: 0,
+          x1Pos: 0,
+          x2Pos: 0
+        });
+        raf(() => {
+          proc();
+        });
+      });
     }
   }
 </script>

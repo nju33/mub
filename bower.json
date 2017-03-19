@@ -1,12 +1,12 @@
 {
-  "name": "mub",
+  "name": "taba",
   "description": "",
-  "main": "dist/mub.js",
+  "main": "dist/taba.js",
   "authors": [
     "nju33 <nju33.ki@gmail.com>"
   ],
   "license": "MIT",
-  "homepage": "https://github.com/nju33/mub#readme",
+  "homepage": "https://github.com/nju33/taba#readme",
   "ignore": [
     "**/.*",
     "node_modules",
