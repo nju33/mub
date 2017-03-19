@@ -1,6 +1,6 @@
 {
   "name": "taba",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "🔧 Fixed table that works with pure JavaScript",
   "main": "dist/taba.umd.js",
   "jsnext:main": "dist/taba.es.js",
