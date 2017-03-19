@@ -1,6 +1,6 @@
 {
   "name": "taba",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "",
   "main": "dist/mub.umd.js",
   "jsnext:main": "dist/mub.es.js",
