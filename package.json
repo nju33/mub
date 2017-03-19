@@ -1,9 +1,9 @@
 {
   "name": "taba",
   "version": "0.0.1",
-  "description": "",
-  "main": "dist/mub.umd.js",
-  "jsnext:main": "dist/mub.es.js",
+  "description": "🔧 Fixed table that works with pure JavaScript",
+  "main": "dist/taba.umd.js",
+  "jsnext:main": "dist/taba.es.js",
   "scripts": {
     "start": "node dev-server.js",
     "prepublish": "yarn prod",
@@ -12,22 +12,21 @@
     "_test": "xo && ava",
     "test": "xo"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/nju33/mub.git"
-  },
+  "repository": "nju33/taba",
   "keywords": [
     "ui",
     "browser",
     "commonjs",
-    "es"
+    "es",
+    "table",
+    "fixed-table"
   ],
   "author": "nju33",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/nju33/mub/issues"
+    "url": "https://github.com/nju33/taba/issues"
   },
-  "homepage": "https://github.com/nju33/mub#readme",
+  "homepage": "https://github.com/nju33/taba#readme",
   "publishConfig": {
     "access": "public"
   },
@@ -84,7 +83,7 @@
         "files": "test/fixtures/*js",
         "esnext": false,
         "globals": [
-          "mub"
+          "taba"
         ]
       }
     ]
